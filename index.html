@@ -1,0 +1,147 @@
+<!DOCTYPE html><html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Surat Cinta Interaktif</title>
+  <style>
+    body {
+      background: #fce4ec;
+      font-family: 'Comic Sans MS', sans-serif;
+      color: #333;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      flex-direction: column;
+      text-align: center;
+      padding: 20px;
+    }
+    .box {
+      max-width: 600px;
+      background: #fff;
+      padding: 25px;
+      border-radius: 20px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.1);
+      margin: 15px;
+    }
+    button {
+      padding: 10px 20px;
+      margin: 8px;
+      border: none;
+      border-radius: 10px;
+      background-color: #ff80ab;
+      color: white;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #ec407a;
+    }
+    input {
+      padding: 10px;
+      border-radius: 10px;
+      border: 1px solid #ccc;
+      width: 80%;
+      margin-top: 10px;
+    }
+    img {
+      max-width: 100%;
+      border-radius: 15px;
+      margin-top: 15px;
+    }
+    audio {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+<audio id="bgm" src="https://files.catbox.moe/wz595h.mp3" autoplay loop></audio>
+<div class="box" id="step1">
+  <h2>Hai kamu! Masukkan nama kamu dulu ya 💌</h2>
+  <input type="text" id="namaInput" placeholder="Nama kamu...">
+  <br><br>
+  <button onclick="nextStep()">Lanjut</button>
+</div><!-- All questions will be created in script to reduce clutter --><div class="box" id="questionBox" style="display:none;">
+  <h2 id="question"></h2>
+  <div id="answers"></div>
+</div><div class="box" id="imageStep" style="display:none;">
+  <h2>Tapi aku ada sesuatu buat kamu....</h2>
+  <img src="https://files.catbox.moe/irjtai.jpg" alt="Kejutan Gemes">
+  <p>Gemes gak?</p>
+  <button onclick="nextImageResponse('gemes')">Gemes</button>
+  <button onclick="nextImageResponse('nggak')">Nggak</button>
+</div><div class="box" id="finalStep" style="display:none;">
+  <h2 id="finalMessage"></h2>
+  <a id="kirimWA" target="_blank"><button>Kirim ke WhatsApp 💌</button></a>
+</div><script>
+  let nama = "";
+  let currentQuestion = 0;
+
+  const questions = [
+    {
+      q: "Kamu suka Teddy Bear, cokelat & bunga nggak?",
+      a: ["Suka banget", "Gak terlalu"]
+    },
+    {
+      q: "Kalau kita jalan bareng, kamu lebih suka:",
+      a: ["Nonton berdua", "Makan enak", "Ngobrol santai"]
+    },
+    {
+      q: "Kamu itu tipe yang...",
+      a: ["Perhatian banget", "Cuek tapi manis"]
+    },
+    {
+      q: "Pernah jatuh cinta diam-diam gak?",
+      a: ["Pernah dan nyesek 😅", "Belum pernah"]
+    },
+    {
+      q: "Kalau kamu badmood, paling suka diapain?",
+      a: ["Dikasih makanan", "Ditemenin ngobrol", "Dibiarin dulu"]
+    },
+    {
+      q: "Satu hal yang bisa bikin kamu senyum tiba-tiba?",
+      a: ["Liat chat dari orang spesial", "Denger lagu favorit", "Kenangan lucu"]
+    }
+  ];
+
+  function nextStep() {
+    nama = document.getElementById("namaInput").value.trim();
+    if (!nama) return alert("Isi nama dulu yaa 😁");
+    document.getElementById("step1").style.display = "none";
+    showQuestion();
+    document.getElementById("bgm").play();
+  }
+
+  function showQuestion() {
+    if (currentQuestion >= questions.length) {
+      document.getElementById("questionBox").style.display = "none";
+      document.getElementById("imageStep").style.display = "block";
+      return;
+    }
+    const q = questions[currentQuestion];
+    document.getElementById("question").innerText = q.q;
+    document.getElementById("answers").innerHTML = "";
+    q.a.forEach(ans => {
+      const btn = document.createElement("button");
+      btn.textContent = ans;
+      btn.onclick = () => {
+        currentQuestion++;
+        showQuestion();
+      };
+      document.getElementById("answers").appendChild(btn);
+    });
+    document.getElementById("questionBox").style.display = "block";
+  }
+
+  function nextImageResponse(res) {
+    document.getElementById("imageStep").style.display = "none";
+    document.getElementById("finalStep").style.display = "block";
+    const msg = res === 'gemes'
+      ? `Iya gemes banget, kayak kamu ${nama} 😳❤️`
+      : `Hehehe... berarti kamu lebih suka yang real ya ${nama}? 😄`
+    document.getElementById("finalMessage").innerText = msg + "\n\nAku cuma mau bilang... salam kenal ya! Ini aku kirim buat kamu 💕";
+
+    const pesanWA = `Hai, aku ${nama}. Makasih Buat Kejutan Nya🌹!`;
+    document.getElementById("kirimWA").href = `https://wa.me/601117880078?text=${encodeURIComponent(pesanWA)}`;
+  }
+</script></body>
+</html>
